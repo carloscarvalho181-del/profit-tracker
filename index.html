@@ -1180,8 +1180,7 @@ function showToast(msg, type = 'success') {
 // ============================================================
 // INIT
 // ============================================================
-window.addEventListener('DOMContentLoaded', async () => {
- async function fazerLogin() {
+async function fazerLogin() {
   const email = document.getElementById('authEmail').value.trim()
   const senha = document.getElementById('authPassword').value
   const errDiv = document.getElementById('loginError')
@@ -1190,7 +1189,6 @@ window.addEventListener('DOMContentLoaded', async () => {
   const { error } = await _supabase.auth.signInWithPassword({ email, password: senha })
   if (error) { errDiv.textContent = 'E-mail ou senha incorretos.'; errDiv.style.display = 'block' }
 }
-
 async function fazerCadastro() {
   const email = document.getElementById('authEmail').value.trim()
   const senha = document.getElementById('authPassword').value
@@ -1199,26 +1197,21 @@ async function fazerCadastro() {
   if (!email || !senha) { errDiv.textContent = 'Preencha e-mail e senha.'; errDiv.style.display = 'block'; return }
   if (senha.length < 6) { errDiv.textContent = 'A senha precisa ter pelo menos 6 caracteres.'; errDiv.style.display = 'block'; return }
   const { error } = await _supabase.auth.signUp({ email, password: senha })
-  if (error) { errDiv.textContent = 'Erro ao criar conta: ' + error.message; errDiv.style.display = 'block' }
+  if (error) { errDiv.textContent = 'Erro: ' + error.message; errDiv.style.display = 'block' }
   else { showToast('Conta criada! Entrando...', 'success') }
 }
-
 async function fazerLogout() {
   await _supabase.auth.signOut()
-  notas = []
-  renderDashboard()
-  renderHistorico()
+  notas = []; renderDashboard(); renderHistorico()
 }
-
 function mostrarApp(mostrar) {
   document.getElementById('loginScreen').style.display = mostrar ? 'none' : 'flex'
   document.querySelector('.topbar').style.display = mostrar ? '' : 'none'
   document.querySelector('.tabs').style.display = mostrar ? '' : 'none'
   document.querySelector('.main').style.display = mostrar ? '' : 'none'
 }
-  
+window.addEventListener('DOMContentLoaded', async () => {
   mostrarApp(false)
-
   _supabase.auth.onAuthStateChange(async (event, session) => {
     if (session) {
       mostrarApp(true)
@@ -1232,53 +1225,6 @@ function mostrarApp(mostrar) {
     }
   })
 })
-
-async function carregarNotasSupabase() {
-  const { data, error } = await _supabase
-    .from('notas')
-    .select('*')
-    .order('data', { ascending: false })
-
-  if (error) {
-    console.error('Erro ao carregar do Supabase:', error)
-    return
-  }
-
-  if (data && data.length > 0) {
-    notas = data.map(n => ({
-      id: n.id,
-      data: n.data,
-      numNota: n.num_nota,
-      corretora: n.corretora,
-      vendaDisp: n.venda_disp,
-      compraDisp: n.compra_disp,
-      vendaOpc: n.venda_opc,
-      compraOpc: n.compra_opc,
-      valorNegocios: n.valor_negocios,
-      ajusteDT: n.ajuste_dt,
-      ajustePosicao: n.ajuste_posicao,
-      taxaCorMed: n.taxa_cor_med,
-      taxaCor: n.taxa_cor,
-      taxaReg: n.taxa_reg,
-      taxasBMF: n.taxas_bmf,
-      irrf: n.irrf,
-      irrfDT: n.irrf_dt,
-      iss: n.iss,
-      outros: n.outros,
-      outros2: n.outros2,
-      irrfCorr: n.irrf_corr,
-      totalDesp: n.total_desp,
-      totalInvest: n.total_invest,
-      totalNormal: n.total_normal,
-      totalLiquido: n.total_liquido,
-      totalLiquidoNota: n.total_liquido_nota,
-      bruto: n.bruto,
-      liquido: n.liquido,
-      observacao: n.observacao
-    }))
-    localStorage.setItem('profitnotas', JSON.stringify(notas))
-  }
-}
 </script>
 </body>
 </html>
