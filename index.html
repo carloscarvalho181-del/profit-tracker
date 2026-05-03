@@ -807,11 +807,12 @@ async function saveNota() {
   notas.push(nota)
 saveToStorage()
 await saveNotaSupabase(nota)
-  updatePeriodSelect();
-  clearForm();
-  renderDashboard();
-  switchTab('historico');
-  showToast('Nota salva com sucesso!', 'success');
+updatePeriodSelect()
+clearForm()
+renderDashboard()
+renderHistorico()
+switchTab('historico')
+showToast('Nota salva com sucesso!', 'success')
 }
 
 // ============================================================
