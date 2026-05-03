@@ -1180,7 +1180,8 @@ function showToast(msg, type = 'success') {
 // ============================================================
 // INIT
 // ============================================================
-async function fazerLogin() {
+window.addEventListener('DOMContentLoaded', async () => {
+ async function fazerLogin() {
   const email = document.getElementById('authEmail').value.trim()
   const senha = document.getElementById('authPassword').value
   const errDiv = document.getElementById('loginError')
@@ -1215,22 +1216,9 @@ function mostrarApp(mostrar) {
   document.querySelector('.tabs').style.display = mostrar ? '' : 'none'
   document.querySelector('.main').style.display = mostrar ? '' : 'none'
 }
-
-window.addEventListener('DOMContentLoaded', async () => {
+  
   mostrarApp(false)
-  _supabase.auth.onAuthStateChange(async (event, session) => {
-    if (session) {
-      mostrarApp(true)
-      await carregarNotasSupabase()
-      updatePeriodSelect()
-      renderDashboard()
-      renderHistorico()
-    } else {
-      mostrarApp(false)
-      notas = []
-    }
-  })
-})
+
   _supabase.auth.onAuthStateChange(async (event, session) => {
     if (session) {
       mostrarApp(true)
