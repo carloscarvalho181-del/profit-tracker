@@ -1,4 +1,3 @@
-<!-- (código mantido exatamente igual até a parte JS) -->
 <script>
 // ============================================================
 // STATE — persiste no localStorage
@@ -11,7 +10,16 @@ async function saveToStorage() {
   localStorage.setItem('profit_notas', JSON.stringify(notas))
 }
 
-// ✅ FUNÇÃO CORRIGIDA (AGORA GLOBAL)
+// ============================================================
+// 🔧 FUNÇÕES GLOBAIS (CORREÇÃO DE ESCOPO)
+// ============================================================
+function mostrarApp(mostrar) {
+  document.getElementById('loginScreen').style.display = mostrar ? 'none' : 'flex'
+  document.querySelector('.topbar').style.display = mostrar ? '' : 'none'
+  document.querySelector('.tabs').style.display = mostrar ? '' : 'none'
+  document.querySelector('.main').style.display = mostrar ? '' : 'none'
+}
+
 async function carregarNotasSupabase() {
   const { data, error } = await _supabase
     .from('notas')
@@ -141,10 +149,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   _supabase.auth.onAuthStateChange(async (event, session) => {
     if (session) {
       mostrarApp(true)
-
-      // ✅ AGORA FUNCIONA
       await carregarNotasSupabase()
-
       updatePeriodSelect()
       renderDashboard()
       renderHistorico()
